@@ -47,7 +47,7 @@ class UserCreate(BaseModel):
     job_occupation: Optional[str] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class UserUpdate(BaseModel):
     first_name: Optional[str] = None
@@ -63,7 +63,7 @@ class UserUpdate(BaseModel):
     job_occupation: Optional[str] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class UserResponse(BaseModel):
     id: int
@@ -82,3 +82,15 @@ class UserResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+class Token(BaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: str
+
+class UserLogin(BaseModel):
+    username: str
+    password: str
+class RefreshTokenRequest(BaseModel):
+    refresh_token: str
+
