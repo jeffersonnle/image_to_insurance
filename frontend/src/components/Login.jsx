@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {useState} from 'react';
 
 const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: '',
   });
 
@@ -36,19 +35,23 @@ const Login = () => {
       alert("Login failed.");
     }
   };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen w-screen" style={{ backgroundColor: '#D8F3FF' }}>
       <div className="w-full max-w-xl bg-white rounded-lg shadow-lg p-8">
         <h2 className="text-2xl font-bold text-center mb-6 text-black">Login</h2>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">
-              Email
+              Username
             </label>
             <input
-              type="email"
+              type="text"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
-              placeholder="Enter your email"
+              placeholder="Enter your username"
               required
             />
           </div>
@@ -59,6 +62,9 @@ const Login = () => {
             </label>
             <input
               type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
               placeholder="Enter your password"
               required
