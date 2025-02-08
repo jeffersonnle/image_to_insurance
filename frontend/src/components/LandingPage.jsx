@@ -6,7 +6,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 
 export default function LandingPage() {
 
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <div className="w-screen h-screen bg-[#EFF8FC] flex flex-col">
