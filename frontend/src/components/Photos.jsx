@@ -45,7 +45,7 @@ export default function Photos() {
             <p className="text-sm">Select a clear photo with a clear view of items and/or furniture you would like to scan.</p>
           </div>
           <Button variant="contained" color="primary" size="large" className="mt-4">
-            Submit Photos
+            Submit Photo
           </Button>
         </div>
       </div>
