@@ -5,7 +5,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 
 export default function LandingPage() {
   return (
-    <div className="w-screen h-screen bg-[#ADD8E6] flex flex-col">
+    <div className="w-screen h-screen bg-[#EFF8FC] flex flex-col">
       {/* Header Bar */}
       <div className="w-full bg-gray-800 text-white py-4 px-6 text-xl font-bold shadow-md flex justify-between items-center">
         <span>Image to Insurance</span>
@@ -26,7 +26,7 @@ export default function LandingPage() {
         </h1>
 
         <div className="flex flex-wrap justify-center gap-4 w-full max-w-6xl">
-          <Button variant="contained" color="primary" size="large" className="!px-8 !py-8 rounded-none">
+          <Button onClick={() => navigate("/photos")}  variant="contained" color="primary" size="large" className="!px-8 !py-8 rounded-none">
             View Photos
           </Button>
           <Button variant="contained" color="secondary" size="large" className="!px-8 !py-8 rounded-none">
