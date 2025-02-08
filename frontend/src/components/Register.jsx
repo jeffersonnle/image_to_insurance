@@ -56,13 +56,18 @@ const RegistrationForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formattedDate = new Date(formData.date_of_occurrence).toISOString().split('T')[0];
+  
+    // Update formData with the formatted date
+    const dataToSend = { ...formData, date_of_occurrence: formattedDate };
+    console.log(typeof dataToSend.date_of_occurrence);
     try{
       const response = await fetch("http://127.0.0.1:8000/users/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(dataToSend),
       });
       const data = await response.json();
       if (response.ok) {
@@ -72,7 +77,6 @@ const RegistrationForm = () => {
       }
     } catch (error) {
       console.error("Error submitting form:", error);
-      alert("Failed to register.");
     }
   };
 
