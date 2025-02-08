@@ -54,9 +54,26 @@ const RegistrationForm = () => {
     if (step > 0) setStep(step - 1);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form Submitted:', formData);
+    try{
+      const response = await fetch("http://127.0.0.1:8000/users/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        alert("Registration successful!");
+      } else {
+        alert(`Error: ${data.detail}`);
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert("Failed to register.");
+    }
   };
 
   return (
