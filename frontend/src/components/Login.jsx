@@ -3,6 +3,38 @@ import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://127.0.0.1:8000/token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert("Login successful!");
+        navigate("/"); // Redirect to dashboard or another page
+      } else {
+        alert(`Error: ${data.detail}`);
+      }
+    } catch (error) {
+      console.error("Error submitting login:", error);
+      alert("Login failed.");
+    }
+  };
   return (
     <div className="flex flex-col items-center justify-center min-h-screen w-screen" style={{ backgroundColor: '#D8F3FF' }}>
       <div className="w-full max-w-xl bg-white rounded-lg shadow-lg p-8">
