@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import {Routes, Route} from 'react-router-dom'
 import './App.css'
-import Login from "./components/landing-page/Login.jsx"
+import Login from "./components/Login.jsx"
+import LandingPage from "./components/LandingPage.jsx"
 
 function App() {
   const [count, setCount] = useState(0)
