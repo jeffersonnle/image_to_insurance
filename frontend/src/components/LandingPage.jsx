@@ -9,12 +9,12 @@ export default function LandingPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="w-screen h-screen bg-[#EFF8FC] flex flex-col">
+    <div className="w-screen h-screen bg-[#D8F3FF] flex flex-col">
       {/* Header Bar */}
       <div className="w-full bg-gray-800 text-white py-4 px-6 text-xl font-bold shadow-md flex justify-between items-center">
         <span>Image to Insurance</span>
         <div className="flex items-center gap-4">
-          <Button variant="contained" color="primary" size="small">
+          <Button variant="contained" color="primary" size="small" onClick={() => navigate("/login")}>
             Login/Register
           </Button>
           <IconButton color="inherit">
@@ -36,7 +36,7 @@ export default function LandingPage() {
           <Button variant="contained" color="primary" size="large" className="!px-8 !py-8 rounded-none">
             Upload
           </Button>
-          <Button variant="contained" color="primary" size="large" className="!px-8 !py-8 rounded-none">
+          <Button variant="contained" color="primary" size="large" className="!px-8 !py-8 rounded-none" onClick={() => navigate("/results")}>
             View Forms
           </Button>
         </div>
