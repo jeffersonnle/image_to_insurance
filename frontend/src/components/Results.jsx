@@ -3,9 +3,33 @@ import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import { IconButton } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
 
 export default function Results() {
   const navigate = useNavigate(); // React Router navigation
+  const formPreviews = [
+    {
+      img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
+      title: "Form 1",
+    },
+    {
+      img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
+      title: "Form 2",
+    },
+    {
+      img: "https://images.unsplash.com/photo-1522770179533-24471fcdba45",
+      title: "Form 3",
+    },
+    {
+      img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c",
+      title: "Form 4",
+    },
+    {
+      img: "https://images.unsplash.com/photo-1533827432537-70133748f5c8",
+      title: "Form 5",
+    }
+  ];
 
   return (
     <div className="w-screen h-screen bg-[#ADD8E6] flex flex-col">
@@ -24,20 +48,22 @@ export default function Results() {
       
       {/* Main Content */}
       <div className="flex w-full h-full p-6">
-        {/* Scrollable Forms List on the Left */}
+        {/* Scrollable Forms List on the Left with Previews */}
         <div className="w-1/2 h-full overflow-y-auto p-4 bg-white rounded-lg shadow-md flex flex-col">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Preview Forms</h2>
           <div className="flex flex-col gap-4">
-            {[...Array(10)].map((_, index) => (
-              <Button 
-                key={index} 
-                variant="outlined" 
-                color="primary" 
-                fullWidth 
-                onClick={() => console.log(`Viewing Form ${index + 1}`)}
-              >
-                Form {index + 1}
-              </Button>
+            {formPreviews.map((form, index) => (
+              <div key={index} className="flex items-center gap-4 bg-gray-100 p-2 rounded-md shadow-sm">
+                <img src={form.img} alt={form.title} className="w-16 h-16 rounded-md object-cover" />
+                <Button 
+                  variant="outlined" 
+                  color="primary" 
+                  fullWidth 
+                  onClick={() => console.log(`Viewing ${form.title}`)}
+                >
+                  {form.title}
+                </Button>
+              </div>
             ))}
           </div>
         </div>

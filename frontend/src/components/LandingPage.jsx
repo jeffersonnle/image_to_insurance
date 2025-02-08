@@ -33,9 +33,6 @@ export default function LandingPage() {
           <Button variant="contained" color="primary" size="large" className="!px-8 !py-8 rounded-none" onClick={() => navigate("/photos")}  >
             View Photos
           </Button>
-          <Button variant="contained" color="primary" size="large" className="!px-8 !py-8 rounded-none">
-            Upload
-          </Button>
           <Button variant="contained" color="primary" size="large" className="!px-8 !py-8 rounded-none" onClick={() => navigate("/results")}>
             View Forms
           </Button>
