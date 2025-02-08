@@ -54,6 +54,7 @@ export default function Photos() {
         </div>
         
         {/* Main Content */}
+        
         <div className="flex w-full h-full p-6">
           {/* Scrollable Photo Grid on the Left using ImageList */}
           <div className="w-1/2 h-full overflow-y-auto p-4 bg-white rounded-lg shadow-md">
@@ -68,6 +69,7 @@ export default function Photos() {
             <Button variant="contained" color="primary" onClick={triggerFileInput} className="mb-4">
               Upload Image
             </Button>
+            <div className="text-center py-4 text-2xl font-bold text-gray-800">Photo Gallery</div>
             <ImageList cols={3} gap={8} sx={{ width: "100%", height: "auto" }}>
               {uploadedImages.map((img, index) => (
                 <ImageListItem key={img} className="relative">
@@ -88,7 +90,7 @@ export default function Photos() {
               ))}
             </ImageList>
             {/* Photo Gallery Header Moved to Bottom */}
-            <div className="text-center py-4 text-2xl font-bold text-gray-800">Photo Gallery</div>
+            
           </div>
   
           {/* Right Section with Instructions and Submit Button */}
@@ -101,7 +103,7 @@ export default function Photos() {
               <p className="text-sm">Select a clear photo with a clear view of items and/or furniture you would like to scan.</p>
             </div>
             <Button variant="contained" color="primary" size="large" className="mt-4">
-              Submit Photos
+              Submit Photo
             </Button>
           </div>
         </div>
