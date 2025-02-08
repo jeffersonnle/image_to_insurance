@@ -8,7 +8,7 @@ export default function Photos() {
     <div className="w-screen h-screen bg-[#ADD8E6] flex flex-col">
       {/* Header Bar */}
       <div className="w-full bg-gray-800 text-white py-4 px-6 text-xl font-bold shadow-md flex justify-between items-center">
-        <span>Image to Insurance</span>
+        <span>Image to Insurance</span> 
         <div className="flex items-center gap-4">
           <Button variant="contained" color="primary" size="small">
             Login/Register

@@ -1,9 +1,13 @@
 import React from "react";
 import Button from "@mui/material/Button";
 import { IconButton } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import SettingsIcon from "@mui/icons-material/Settings";
 
 export default function LandingPage() {
+
+  //const navigate = useNavigate();
+
   return (
     <div className="w-screen h-screen bg-[#EFF8FC] flex flex-col">
       {/* Header Bar */}
@@ -26,13 +30,13 @@ export default function LandingPage() {
         </h1>
 
         <div className="flex flex-wrap justify-center gap-4 w-full max-w-6xl">
-          <Button onClick={() => navigate("/photos")}  variant="contained" color="primary" size="large" className="!px-8 !py-8 rounded-none">
+          <Button variant="contained" color="primary" size="large" className="!px-8 !py-8 rounded-none" onClick={() => navigate("/photos")}  >
             View Photos
           </Button>
-          <Button variant="contained" color="secondary" size="large" className="!px-8 !py-8 rounded-none">
+          <Button variant="contained" color="primary" size="large" className="!px-8 !py-8 rounded-none">
             Upload
           </Button>
-          <Button variant="contained" color="success" size="large" className="!px-8 !py-8 rounded-none">
+          <Button variant="contained" color="primary" size="large" className="!px-8 !py-8 rounded-none">
             View Forms
           </Button>
         </div>

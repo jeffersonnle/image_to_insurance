@@ -4,9 +4,10 @@ import './App.css'
 import Login from "./components/Login.jsx"
 import LandingPage from "./components/LandingPage.jsx"
 import Register from "./components/Register.jsx"
+import Photos from "./components/Photos.jsx"
 
 function App() {
-  const [count, setCount] = useState(0)
+  //const [count, setCount] = useState(0)
 
   return (
     <>
