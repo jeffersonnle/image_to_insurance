@@ -8,8 +8,15 @@ import SettingsIcon from "@mui/icons-material/Settings";
 export default function Processing() {
     const navigate = useNavigate();
     const [showButton, setShowButton] = useState(false);
+    const [selectedImage, setSelectedImage] = useState(null);
 
     useEffect(() => {
+        // Retrieve the selected image from localStorage
+        const storedImage = localStorage.getItem("selected_image");
+        if (storedImage) {
+            setSelectedImage(storedImage);
+        }
+
         // Simulate processing delay (e.g., 3 seconds)
         const timeout = setTimeout(() => {
             setShowButton(true);
@@ -35,7 +42,16 @@ export default function Processing() {
 
             {/* Processing Screen */}
             <div className="flex flex-col items-center justify-center h-full">
-                <h2 className="text-2xl font-bold text-gray-800 mb-6">Processing...</h2>
+                <h2 className="text-2xl font-bold text-gray-800 mb-4">Processing...</h2>
+
+                {/* Show Selected Image */}
+                {selectedImage && (
+                    <img 
+                        src={selectedImage} 
+                        alt="Selected" 
+                        className="w-1/2 max-w-lg rounded-lg shadow-md mb-6"
+                    />
+                )}
                 
                 {/* Loading Spinner */}
                 <CircularProgress size={80} color="primary" />
