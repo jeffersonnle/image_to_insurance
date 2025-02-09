@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; 
 import Button from "@mui/material/Button";
@@ -10,7 +10,7 @@ export default function Photos() {
     const [selectedIndex, setSelectedIndex] = useState(null);
     const [uploadedImages, setUploadedImages] = useState([]);
     const fileInputRef = React.useRef(null);
-    const navigate = useNavigate();  // ✅ Add navigation
+    const navigate = useNavigate();  
 
     const handleSelect = (index) => {
         setSelectedIndex(index === selectedIndex ? null : index);
@@ -20,13 +20,13 @@ export default function Photos() {
         const token = localStorage.getItem("access_token");
         if (!token) return null;
 
-      try {
-        const decodedToken = jwtDecode(token); // Use jwt_decode for decoding
-        return decodedToken.username; // Assuming the username is part of the decoded token
-      } catch (error) {
-        console.error("Error decoding the token", error);
-        return null;
-      }
+        try {
+            const decodedToken = jwtDecode(token); 
+            return decodedToken.sub; 
+        } catch (error) {
+            console.error("Error decoding the token", error);
+            return null;
+        }
     };
 
     const handleImageUpload = async (event) => {
@@ -64,6 +64,32 @@ export default function Photos() {
             fileInputRef.current.click();
         }
     };
+
+    // Function to fetch images for the current user
+    const fetchUserImages = async () => {
+        const username = getUsernameFromToken();
+        if (!username) {
+            console.error("No username found in the token.");
+            return;
+        }
+
+        try {
+            const response = await axios.get("http://localhost:8000/images/", {
+                params: { username }
+            });
+
+            if (response.data.image_urls) {
+                setUploadedImages(response.data.image_urls);
+            }
+        } catch (error) {
+            console.error("Error fetching images", error);
+        }
+    };
+
+    // Fetch images when component mounts
+    useEffect(() => {
+        fetchUserImages();
+    }, []);
 
     return (
         <div className="w-screen h-screen bg-[#ADD8E6] flex flex-col">
