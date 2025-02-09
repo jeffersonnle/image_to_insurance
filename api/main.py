@@ -183,19 +183,6 @@ def refresh_access_token(refresh_token_request: database.RefreshTokenRequest, db
 from fastapi import File, UploadFile
 from fastapi.responses import JSONResponse
 from google.cloud import storage
-# import shutil
-# import os
-
-# UPLOAD_DIR = "uploaded_images"
-# os.makedirs(UPLOAD_DIR, exist_ok=True)
-
-# @app.post("/upload/")
-# async def upload_image(image: UploadFile = File(...)):
-#     file_path = f"{UPLOAD_DIR}/{image.filename}"
-#     with open(file_path, "wb") as buffer:
-#         shutil.copyfileobj(image.file, buffer)
-    
-#     return JSONResponse({"image_url": f"http://localhost:8000/{file_path}"})
 
 storage_client = storage.Client()
 bucket = storage_client.get_bucket('image_to_insurance_hacknyu')
@@ -219,7 +206,6 @@ async def upload_image(image: UploadFile = File(...)):
     # Example: save_image_url_to_db(image_url)
     
     return JSONResponse(content={"message": "Image uploaded successfully!", "image_url": image_url})
-
 
 
 ##### Image Analysis API #####
