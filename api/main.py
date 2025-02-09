@@ -223,6 +223,22 @@ def get_user_images(username: str = Query(..., description="The username to fetc
 
 ##### Image Analysis API #####
 @app.get("/analyze/")
-def analyze(image_url: str):
-    return analyze_image(image_url)
+async def analyze(image_url: str):
+    """
+    Calls the analyze_image function and ensures the response is correctly formatted.
+    """
+    try:
+        result = analyze_image(image_url)
+
+        # If the function returns a string, ensure it's properly formatted JSON
+        if isinstance(result, str):
+            import json
+            result = json.loads(result)
+
+        return JSONResponse(content=result)
+
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
 ##### Image Analysis API Ends #####
+

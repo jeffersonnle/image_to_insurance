@@ -6,6 +6,24 @@ import { IconButton, Checkbox, ImageList, ImageListItem } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { jwtDecode } from "jwt-decode";
 
+const analyzeImage = async (imageUrl) => {
+    try {
+        const response = await axios.get("http://localhost:8000/analyze/", {
+            params: { image_url: imageUrl }, // Send image URL as a query parameter
+        });
+
+        if (response.status === 200) {
+            console.log("Analysis Results:", response.data);
+            return response.data; // Use this data in your application
+        } else {
+            throw new Error("Image analysis failed.");
+        }
+    } catch (error) {
+        console.error("Error analyzing image:", error.response ? error.response.data : error.message);
+        return null;
+    }
+};
+
 export default function Photos() {
     const [selectedURL, setSelectedURL] = useState(null);
     const [uploadedImages, setUploadedImages] = useState([]);
@@ -16,6 +34,30 @@ export default function Photos() {
       setSelectedURL(url === selectedURL ? null : url);
       console.log(url);
     };
+
+    const handleSubmit = async () => {
+        if (!selectedURL) {
+            alert("Please select a photo first!");
+            return;
+        }
+    
+        try {
+            const analysisResults = await analyzeImage(selectedURL);
+            console.log(analysisResults);
+            if (analysisResults) {
+                localStorage.setItem("analysis_results", JSON.stringify(analysisResults));
+                navigate("/results"); // Redirect to Results page
+            } else {
+                alert("Failed to analyze image. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error during analysis:", error);
+            alert("An error occurred while analyzing the image.");
+        }
+    };
+    
+
+
 
     const getUsernameFromToken = () => {
         const token = localStorage.getItem("access_token");
@@ -158,7 +200,7 @@ export default function Photos() {
                         color="primary" 
                         size="large" 
                         className="mt-4"
-                         // ✅ Redirect to Processing
+                        onClick={handleSubmit} // add api call to analyze_image here
                     >
                         Submit Photo
                     </Button>
