@@ -1,7 +1,8 @@
+from datetime import date
 from sqlalchemy import create_engine, Column, Integer, String, Date
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from typing import Optional
 
 DATABASE_URL = "mysql+pymysql://root:@localhost:3306/hack"
@@ -45,10 +46,19 @@ class UserCreate(BaseModel):
     age: Optional[int] = None
     date_of_occurrence: str  
     job_occupation: Optional[str] = None
-
+    @field_validator('date_of_occurrence')
+    def validate_date(cls, v):
+        try:
+            # Try to parse the date to ensure it's in the correct format
+            return date.fromisoformat(v)  # This will validate "YYYY-MM-DD"
+        except ValueError:
+            raise ValueError("Invalid date format, should be YYYY-MM-DD")
     class Config:
         from_attributes = True
-
+        # Convert string fields to appropriate types during validation
+        json_encoders = {
+            date: lambda v: v.isoformat()
+        }
 class UserUpdate(BaseModel):
     first_name: Optional[str] = None
     middle_name: Optional[str] = None
