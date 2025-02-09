@@ -1,15 +1,13 @@
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 import database
 from typing import List
-import bcrypt
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
-from pydantic import BaseModel
 from passlib.context import CryptContext
-from test import analyze_image
+# from test import analyze_image
 
 ##### configs #####
 app = FastAPI()
@@ -154,5 +152,26 @@ def refresh_access_token(refresh_token_request: database.RefreshTokenRequest):
     return {"access_token": new_access_token, "token_type": "bearer"}
 
 ##### Authentication API ends #####
+
+
+
+##### Upload #####
+from fastapi import File, UploadFile
+from fastapi.responses import JSONResponse
+import shutil
+import os
+
+app = FastAPI()
+
+UPLOAD_DIR = "uploaded_images"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+@app.post("/upload/")
+async def upload_image(image: UploadFile = File(...)):
+    file_path = f"{UPLOAD_DIR}/{image.filename}"
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(image.file, buffer)
+    
+    return JSONResponse({"image_url": f"http://localhost:8000/{file_path}"})
 
 
