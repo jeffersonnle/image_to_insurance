@@ -123,6 +123,21 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
     db_user.date_of_occurrence = db_user.date_of_occurrence.strftime("%Y-%m-%d")
     return db_user
 
+@app.get("/users/me", response_model=database.UserResponse)
+def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    payload = decode_token(token)
+    if payload is None:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+
+    user_id = payload.get("user_id")
+    db_user = db.query(database.User).filter(database.User.id == user_id).first()
+
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    return db_user
+
+
 ##### Authentication API #####
 @app.post("/token", response_model=database.Token)
 def login_for_access_token(form_data: database.UserLogin, db: Session = Depends(get_db)):
@@ -158,21 +173,45 @@ def refresh_access_token(refresh_token_request: database.RefreshTokenRequest):
 ##### Upload #####
 from fastapi import File, UploadFile
 from fastapi.responses import JSONResponse
+from google.cloud import storage
 import shutil
 import os
 
-app = FastAPI()
+# UPLOAD_DIR = "uploaded_images"
+# os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-UPLOAD_DIR = "uploaded_images"
-os.makedirs(UPLOAD_DIR, exist_ok=True)
+# @app.post("/upload/")
+# async def upload_image(image: UploadFile = File(...)):
+#     file_path = f"{UPLOAD_DIR}/{image.filename}"
+#     with open(file_path, "wb") as buffer:
+#         shutil.copyfileobj(image.file, buffer)
+    
+#     return JSONResponse({"image_url": f"http://localhost:8000/{file_path}"})
+
+storage_client = storage.Client()
+bucket = storage_client.get_bucket('image_to_insurance_hacknyu')
 
 @app.post("/upload/")
 async def upload_image(image: UploadFile = File(...)):
-    file_path = f"{UPLOAD_DIR}/{image.filename}"
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(image.file, buffer)
+    # Read image data
+    image_data = await image.read()
     
-    return JSONResponse({"image_url": f"http://localhost:8000/{file_path}"})
+    # Generate a unique filename (you can use UUIDs, timestamps, etc.)
+    file_name = f"hack_images/{image.filename}"
+    
+    # Upload to GCP bucket
+    blob = bucket.blob(file_name)
+    blob.upload_from_string(image_data, content_type=image.content_type)
+    
+    # Get the public URL of the image
+    image_url = blob.public_url
+    
+    # Save the image URL to the database (this depends on your DB model)
+    # Example: save_image_url_to_db(image_url)
+    
+    return JSONResponse(content={"message": "Image uploaded successfully!", "image_url": image_url})
+
+
 
 
 ##### Image Analysis API #####
