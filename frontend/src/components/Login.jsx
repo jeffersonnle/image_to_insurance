@@ -25,6 +25,8 @@ const Login = () => {
 
       const data = await response.json();
       if (response.ok) {
+        localStorage.setItem("access_token", data.access_token); //stores JWT token
+        localStorage.setItem("refresh_token", data.refresh_token);
         alert("Login successful!");
         navigate("/"); // Redirect to dashboard or another page
       } else {
