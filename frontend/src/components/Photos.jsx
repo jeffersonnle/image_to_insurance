@@ -20,13 +20,14 @@ export default function Photos() {
         Array.from(files).forEach((file) => {
           formData.append("image", file);
         });
-
+        
         try {
           const response = await axios.post("http://localhost:8000/upload/", formData, {
             headers: { "Content-Type": "multipart/form-data" },
           });
           
           if (response.data.image_url) {
+            console.log(response.data.image_url)
             setUploadedImages((prev) => [...prev, response.data.image_url]);
           }
         } catch (error) {

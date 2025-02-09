@@ -7,7 +7,7 @@ from typing import List
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-# from image_to_list.image_to_list.test import analyze_image
+from image_to_list.image_to_list.test import analyze_image
 
 ##### configs #####
 app = FastAPI()
@@ -183,8 +183,8 @@ def refresh_access_token(refresh_token_request: database.RefreshTokenRequest, db
 from fastapi import File, UploadFile
 from fastapi.responses import JSONResponse
 from google.cloud import storage
-import shutil
-import os
+# import shutil
+# import os
 
 # UPLOAD_DIR = "uploaded_images"
 # os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -197,34 +197,33 @@ import os
     
 #     return JSONResponse({"image_url": f"http://localhost:8000/{file_path}"})
 
-# storage_client = storage.Client()
-# bucket = storage_client.get_bucket('image_to_insurance_hacknyu')
+storage_client = storage.Client()
+bucket = storage_client.get_bucket('image_to_insurance_hacknyu')
 
-# @app.post("/upload/")
-# async def upload_image(image: UploadFile = File(...)):
-#     # Read image data
-#     image_data = await image.read()
+@app.post("/upload/")
+async def upload_image(image: UploadFile = File(...)):
+    # Read image data
+    image_data = await image.read()
     
-#     # Generate a unique filename (you can use UUIDs, timestamps, etc.)
-#     file_name = f"hack_images/{image.filename}"
+    # Generate a unique filename (you can use UUIDs, timestamps, etc.)
+    file_name = f"hack_images/{image.filename}"
     
-#     # Upload to GCP bucket
-#     blob = bucket.blob(file_name)
-#     blob.upload_from_string(image_data, content_type=image.content_type)
+    # Upload to GCP bucket
+    blob = bucket.blob(file_name)
+    blob.upload_from_string(image_data, content_type=image.content_type)
     
-#     # Get the public URL of the image
-#     image_url = blob.public_url
+    # Get the public URL of the image
+    image_url = blob.public_url
     
-#     # Save the image URL to the database (this depends on your DB model)
-#     # Example: save_image_url_to_db(image_url)
+    # Save the image URL to the database (this depends on your DB model)
+    # Example: save_image_url_to_db(image_url)
     
-#     return JSONResponse(content={"message": "Image uploaded successfully!", "image_url": image_url})
-
-
+    return JSONResponse(content={"message": "Image uploaded successfully!", "image_url": image_url})
 
 
-# ##### Image Analysis API #####
-# @app.get("/analyze/")
-# def analyze(image_url: str):
-#     return analyze_image(image_url)
-# ##### Image Analysis API Ends #####
+
+##### Image Analysis API #####
+@app.get("/analyze/")
+def analyze(image_url: str):
+    return analyze_image(image_url)
+##### Image Analysis API Ends #####
