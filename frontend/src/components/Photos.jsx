@@ -3,6 +3,7 @@ import axios from "axios";
 import Button from "@mui/material/Button";
 import { IconButton, Checkbox, ImageList, ImageListItem } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
+import { jwtDecode } from "jwt-decode" 
 
 export default function Photos() {
     const [selectedIndex, setSelectedIndex] = useState(null);
@@ -13,6 +14,19 @@ export default function Photos() {
       setSelectedIndex(index === selectedIndex ? null : index);
     };
 
+    const getUsernameFromToken = () => {
+      const token = localStorage.getItem('access_token');
+      if (!token) return null;
+
+      try {
+        const decodedToken = jwtDecode(token); // Use jwt_decode for decoding
+        return decodedToken.username; // Assuming the username is part of the decoded token
+      } catch (error) {
+        console.error("Error decoding the token", error);
+        return null;
+      }
+    };
+
     const handleImageUpload = async (event) => {
       const files = event.target.files;
       if (files.length > 0) {
@@ -20,10 +34,17 @@ export default function Photos() {
         Array.from(files).forEach((file) => {
           formData.append("image", file);
         });
-        
+
+        const username = getUsernameFromToken();
+        if (!username) {
+          console.error("No username found in the token.");
+          return;
+        }
+
         try {
           const response = await axios.post("http://localhost:8000/upload/", formData, {
             headers: { "Content-Type": "multipart/form-data" },
+            params: { username }, // Add the username as a query parameter
           });
           
           if (response.data.image_url) {
