@@ -180,7 +180,7 @@ def refresh_access_token(refresh_token_request: database.RefreshTokenRequest, db
 
 
 ##### Upload #####
-from fastapi import File, UploadFile
+from fastapi import File, UploadFile, Query
 from fastapi.responses import JSONResponse
 from google.cloud import storage
 
@@ -188,25 +188,20 @@ storage_client = storage.Client()
 bucket = storage_client.get_bucket('image_to_insurance_hacknyu')
 
 @app.post("/upload/")
-async def upload_image(image: UploadFile = File(...)):
-    # Read image data
+async def upload_image(
+    image: UploadFile = File(...), 
+    username: str = Query(..., description="The username to store the image under")
+):
     image_data = await image.read()
     
-    # Generate a unique filename (you can use UUIDs, timestamps, etc.)
-    file_name = f"hack_images/{image.filename}"
+    file_name = f"hack_images/{username}/{image.filename}"
     
-    # Upload to GCP bucket
     blob = bucket.blob(file_name)
     blob.upload_from_string(image_data, content_type=image.content_type)
     
-    # Get the public URL of the image
     image_url = blob.public_url
     
-    # Save the image URL to the database (this depends on your DB model)
-    # Example: save_image_url_to_db(image_url)
-    
     return JSONResponse(content={"message": "Image uploaded successfully!", "image_url": image_url})
-
 
 ##### Image Analysis API #####
 @app.get("/analyze/")
