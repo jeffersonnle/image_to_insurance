@@ -7,7 +7,7 @@ from typing import List
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-from test import analyze_image
+from image_to_list.image_to_list.test import analyze_image
 
 ##### configs #####
 app = FastAPI()
