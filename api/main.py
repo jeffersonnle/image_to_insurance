@@ -123,6 +123,21 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
     db_user.date_of_occurrence = db_user.date_of_occurrence.strftime("%Y-%m-%d")
     return db_user
 
+@app.get("/users/me", response_model=database.UserResponse)
+def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    payload = decode_token(token)
+    if payload is None:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+
+    user_id = payload.get("user_id")
+    db_user = db.query(database.User).filter(database.User.id == user_id).first()
+
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    return db_user
+
+
 ##### Authentication API #####
 @app.post("/token", response_model=database.Token)
 def login_for_access_token(form_data: database.UserLogin, db: Session = Depends(get_db)):

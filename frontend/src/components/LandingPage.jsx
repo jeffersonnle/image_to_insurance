@@ -3,10 +3,17 @@ import Button from "@mui/material/Button";
 import { IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import SettingsIcon from "@mui/icons-material/Settings";
+import { useSession } from "./SessionProvider";
 
 export default function LandingPage() {
-
+  const { user } = useSession();
   const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    window.location.reload(); // Refresh page to reset session state
+};
+
 
   return (
     <div className="w-screen h-screen bg-[#D8F3FF] flex flex-col">
@@ -14,9 +21,16 @@ export default function LandingPage() {
       <div className="w-full bg-gray-800 text-white py-4 px-6 text-xl font-bold shadow-md flex justify-between items-center">
         <span>Image to Insurance</span>
         <div className="flex items-center gap-4">
-          <Button variant="contained" color="primary" size="small" onClick={() => navigate("/login")}>
-            Login/Register
-          </Button>
+        {user ? (
+          <p>Welcome {user.username} <Button variant="contained" color="primary" size="small" onClick={handleLogout}>
+          Logout
+        </Button></p>
+        ) : <Button variant="contained" color="primary" size="small" onClick={() => navigate("/login")}>
+        Login/Register
+      </Button> }
+        
+          
+          
           <IconButton color="inherit">
             <SettingsIcon />
           </IconButton>
