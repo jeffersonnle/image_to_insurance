@@ -17,7 +17,10 @@
     "@mui/styled-engine-sc": "^6.4.3",
     "@tailwindcss/vite": "^4.0.4",
     "axios": "^1.7.9",
+<<<<<<< HEAD
     "jsonwebtoken": "^9.0.2",
+=======
+>>>>>>> 8378cefd34028976e11a063d429501836a26cdca
     "jwt-decode": "^4.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
