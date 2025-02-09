@@ -20,15 +20,17 @@ export default function LandingPage() {
       {/* Header Bar */}
       <div className="w-full bg-gray-800 text-white py-4 px-6 text-xl font-bold shadow-md flex justify-between items-center">
         <span>Image to Insurance</span>
-        {user ? (
-          <p>Welcome {user.username}</p>
-        ) : null }
-        <button onClick={handleLogout} className="bg-red-500 px-4 py-2 rounded-lg hover:bg-red-600">
-          Logout</button>
         <div className="flex items-center gap-4">
-          <Button variant="contained" color="primary" size="small" onClick={() => navigate("/login")}>
-            Login/Register
-          </Button>
+        {user ? (
+          <p>Welcome {user.username} <Button variant="contained" color="primary" size="small" onClick={handleLogout}>
+          Logout
+        </Button></p>
+        ) : <Button variant="contained" color="primary" size="small" onClick={() => navigate("/login")}>
+        Login/Register
+      </Button> }
+        
+          
+          
           <IconButton color="inherit">
             <SettingsIcon />
           </IconButton>
