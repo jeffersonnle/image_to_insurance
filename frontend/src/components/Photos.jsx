@@ -7,13 +7,14 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import { jwtDecode } from "jwt-decode";
 
 export default function Photos() {
-    const [selectedIndex, setSelectedIndex] = useState(null);
+    const [selectedURL, setSelectedURL] = useState(null);
     const [uploadedImages, setUploadedImages] = useState([]);
     const fileInputRef = React.useRef(null);
     const navigate = useNavigate();  
 
-    const handleSelect = (index) => {
-        setSelectedIndex(index === selectedIndex ? null : index);
+    const handleSelect = (url) => {
+      setSelectedURL(url === selectedURL ? null : url);
+      console.log(url);
     };
 
     const getUsernameFromToken = () => {
@@ -134,8 +135,8 @@ export default function Photos() {
                                 <div className="absolute bottom-2 right-2">
                                     <Checkbox 
                                         color="primary" 
-                                        checked={selectedIndex === index} 
-                                        onChange={() => handleSelect(index)}
+                                        checked={selectedURL === img} 
+                                        onChange={() => handleSelect(img)}
                                     />
                                 </div>
                             </ImageListItem>
