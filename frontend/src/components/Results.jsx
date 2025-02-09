@@ -33,7 +33,7 @@ export default function Results() {
                 <span>Image to Insurance</span>
                 <div className="flex items-center gap-2">
                     <Button variant="contained" color="primary" size="small">
-                        Login/Register
+                        Logout
                     </Button>
                     <IconButton color="inherit">
                         <SettingsIcon fontSize="small" />

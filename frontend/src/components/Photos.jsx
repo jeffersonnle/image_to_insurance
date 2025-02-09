@@ -2,19 +2,19 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; 
 import Button from "@mui/material/Button";
-import { IconButton, Checkbox, ImageList, ImageListItem } from "@mui/material";
+import { IconButton, Checkbox, ImageList, ImageListItem, CircularProgress } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { jwtDecode } from "jwt-decode";
 
 const analyzeImage = async (imageUrl) => {
     try {
         const response = await axios.get("http://localhost:8000/analyze/", {
-            params: { image_url: imageUrl }, // Send image URL as a query parameter
+            params: { image_url: imageUrl },
         });
 
         if (response.status === 200) {
             console.log("Analysis Results:", response.data);
-            return response.data; // Use this data in your application
+            return response.data;
         } else {
             throw new Error("Image analysis failed.");
         }
@@ -27,12 +27,13 @@ const analyzeImage = async (imageUrl) => {
 export default function Photos() {
     const [selectedURL, setSelectedURL] = useState(null);
     const [uploadedImages, setUploadedImages] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const fileInputRef = React.useRef(null);
     const navigate = useNavigate();  
 
     const handleSelect = (url) => {
-      setSelectedURL(url === selectedURL ? null : url);
-      console.log(url);
+        setSelectedURL(url === selectedURL ? null : url);
+        console.log(url);
     };
 
     const handleSubmit = async () => {
@@ -40,13 +41,14 @@ export default function Photos() {
             alert("Please select a photo first!");
             return;
         }
-    
+
+        setIsLoading(true); // Start loading
+
         try {
             const analysisResults = await analyzeImage(selectedURL);
             console.log(analysisResults);
             if (analysisResults) {
                 localStorage.setItem("analysis_results", JSON.stringify(analysisResults));
-                // ✅ Pass imageURL when navigating
                 navigate("/results", { state: { imageURL: selectedURL } });            
             } else {
                 alert("Failed to analyze image. Please try again.");
@@ -54,11 +56,10 @@ export default function Photos() {
         } catch (error) {
             console.error("Error during analysis:", error);
             alert("An error occurred while analyzing the image.");
+        } finally {
+            setIsLoading(false); // Stop loading
         }
     };
-    
-
-
 
     const getUsernameFromToken = () => {
         const token = localStorage.getItem("access_token");
@@ -109,7 +110,6 @@ export default function Photos() {
         }
     };
 
-    // Function to fetch images for the current user
     const fetchUserImages = async () => {
         const username = getUsernameFromToken();
         if (!username) {
@@ -130,7 +130,6 @@ export default function Photos() {
         }
     };
 
-    // Fetch images when component mounts
     useEffect(() => {
         fetchUserImages();
     }, []);
@@ -142,7 +141,7 @@ export default function Photos() {
                 <span>Image to Insurance</span>
                 <div className="flex items-center gap-4">
                     <Button variant="contained" color="primary" size="small">
-                        Login/Register
+                        Logout
                     </Button>
                     <IconButton color="inherit">
                         <SettingsIcon />
@@ -201,9 +200,10 @@ export default function Photos() {
                         color="primary" 
                         size="large" 
                         className="mt-4"
-                        onClick={handleSubmit} // add api call to analyze_image here
+                        onClick={handleSubmit}
+                        disabled={isLoading}
                     >
-                        Submit Photo
+                        {isLoading ? <CircularProgress size={24} color="inherit" /> : "Submit Photo"}
                     </Button>
                 </div>
             </div>
