@@ -29,9 +29,10 @@ def analyze_image(image_url: str):
             messages=[
                 {
                     "role": "system",
-                    "content": "You are an expert in insurance claims and valuation. Analyze the provided image and list all identifiable furniture items along with their estimated valuation in USD. However, remember that you can be more specific than my example, you can add brands, etc. Output only a JSON object with the following format:\n\n"
+                    "content": "You are an expert in insurance claims and valuation. Analyze the provided image and list all identifiable furniture items along with their estimated valuation in USD. Output only a JSON object with the following format:\n\n"
                                "{\n  \"items\": {\n    \"Sofa\": 1200,\n    \"Dining Table\": 800,\n    \"Bookshelf\": 300\n  }\n}\n\n"
                                "Ensure the JSON is correctly formatted and contains no additional text or explanations."
+                               "Do not wrap the JSON in any other text or markdown."
                 },
                 {
                     "role": "user",
