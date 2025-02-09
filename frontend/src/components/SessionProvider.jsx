@@ -7,29 +7,40 @@ export const SessionProvider = ({ children }) => {
 
     useEffect(() => {
         const fetchUser = async () => {
-            const token = localStorage.getItem("access_token");
+            const token = localStorage.getItem("refresh_token");
             if (!token) return;
-
+        
             try {
-                const response = await fetch("http://127.0.0.1:8000/users/me", {
-                    method: "GET",
+                const response = await fetch("http://127.0.0.1:8000/token/refresh", {
+                    method: "POST",
                     headers: {
-                        "Authorization": `Bearer ${token}`,
                         "Content-Type": "application/json",
-                    }
+                    },
+                    body: JSON.stringify({ refresh_token: token })
                 });
-
+        
                 if (response.ok) {
                     const data = await response.json();
-                    setUser(data);
+                    localStorage.setItem("access_token", data.access_token);
+                    localStorage.setItem("refresh_token", data.refresh_token);
+                    
+                    setUser(data); 
+                } else {
+                    console.error("Failed to refresh token:", response.statusText);
+                    setUser(null);
                 }
             } catch (error) {
                 console.error("Error fetching session data:", error);
                 setUser(null);
             }
         };
+        fetchUser(); 
 
-        fetchUser();
+        const intervalId = setInterval(() => {
+            fetchUser(); 
+        }, 5 * 60 * 1000);
+
+        return () => clearInterval(intervalId); 
     }, []);
 
     return (

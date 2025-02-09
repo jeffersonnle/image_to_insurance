@@ -22,7 +22,7 @@ export default function LandingPage() {
         <span>Image to Insurance</span>
         <div className="flex items-center gap-4">
         {user ? (
-          <p>Welcome {user.username} <Button variant="contained" color="primary" size="small" onClick={handleLogout}>
+          <p><Button variant="contained" color="primary" size="small" onClick={handleLogout}>
           Logout
         </Button></p>
         ) : <Button variant="contained" color="primary" size="small" onClick={() => navigate("/login")}>

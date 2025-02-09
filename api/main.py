@@ -7,7 +7,7 @@ from typing import List
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-from image_to_list.image_to_list.test import analyze_image
+# from image_to_list.image_to_list.test import analyze_image
 
 ##### configs #####
 app = FastAPI()
@@ -123,19 +123,19 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
     db_user.date_of_occurrence = db_user.date_of_occurrence.strftime("%Y-%m-%d")
     return db_user
 
-@app.get("/users/me", response_model=database.UserResponse)
-def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
-    payload = decode_token(token)
-    if payload is None:
-        raise HTTPException(status_code=401, detail="Invalid or expired token")
+# @app.get("/users/me", response_model=database.UserResponse)
+# def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+#     payload = decode_token(token)
+#     if payload is None:
+#         raise HTTPException(status_code=401, detail="Invalid or expired token")
 
-    user_id = payload.get("user_id")
-    db_user = db.query(database.User).filter(database.User.id == user_id).first()
+#     user_id = payload.get("user_id")
+#     db_user = db.query(database.User).filter(database.User.id == user_id).first()
 
-    if db_user is None:
-        raise HTTPException(status_code=404, detail="User not found")
+#     if db_user is None:
+#         raise HTTPException(status_code=404, detail="User not found")
 
-    return db_user
+#     return db_user
 
 
 ##### Authentication API #####
@@ -158,14 +158,23 @@ def login_for_access_token(form_data: database.UserLogin, db: Session = Depends(
 
 
 @app.post("/token/refresh", response_model=database.Token)
-def refresh_access_token(refresh_token_request: database.RefreshTokenRequest):
+def refresh_access_token(refresh_token_request: database.RefreshTokenRequest, db: Session = Depends(get_db)):
+    # Decode the refresh token
     payload = decode_token(refresh_token_request.refresh_token)
     if payload is None:
         raise HTTPException(status_code=401, detail="Invalid or expired refresh token")
     
+    # Create a new access token using the user identifier or username from the payload
     new_access_token = create_access_token(data={"sub": payload["sub"]})
-    return {"access_token": new_access_token, "token_type": "bearer"}
+    
+    # Create a new refresh token
+    new_refresh_token = create_refresh_token(data={"sub": payload["sub"]})
 
+    return {
+        "access_token": new_access_token, 
+        "refresh_token": new_refresh_token,  # Return the new refresh token
+        "token_type": "bearer"
+    }
 ##### Authentication API ends #####
 
 
@@ -188,34 +197,34 @@ import os
     
 #     return JSONResponse({"image_url": f"http://localhost:8000/{file_path}"})
 
-storage_client = storage.Client()
-bucket = storage_client.get_bucket('image_to_insurance_hacknyu')
+# storage_client = storage.Client()
+# bucket = storage_client.get_bucket('image_to_insurance_hacknyu')
 
-@app.post("/upload/")
-async def upload_image(image: UploadFile = File(...)):
-    # Read image data
-    image_data = await image.read()
+# @app.post("/upload/")
+# async def upload_image(image: UploadFile = File(...)):
+#     # Read image data
+#     image_data = await image.read()
     
-    # Generate a unique filename (you can use UUIDs, timestamps, etc.)
-    file_name = f"hack_images/{image.filename}"
+#     # Generate a unique filename (you can use UUIDs, timestamps, etc.)
+#     file_name = f"hack_images/{image.filename}"
     
-    # Upload to GCP bucket
-    blob = bucket.blob(file_name)
-    blob.upload_from_string(image_data, content_type=image.content_type)
+#     # Upload to GCP bucket
+#     blob = bucket.blob(file_name)
+#     blob.upload_from_string(image_data, content_type=image.content_type)
     
-    # Get the public URL of the image
-    image_url = blob.public_url
+#     # Get the public URL of the image
+#     image_url = blob.public_url
     
-    # Save the image URL to the database (this depends on your DB model)
-    # Example: save_image_url_to_db(image_url)
+#     # Save the image URL to the database (this depends on your DB model)
+#     # Example: save_image_url_to_db(image_url)
     
-    return JSONResponse(content={"message": "Image uploaded successfully!", "image_url": image_url})
-
-
+#     return JSONResponse(content={"message": "Image uploaded successfully!", "image_url": image_url})
 
 
-##### Image Analysis API #####
-@app.get("/analyze/")
-def analyze(image_url: str):
-    return analyze_image(image_url)
-##### Image Analysis API Ends #####
+
+
+# ##### Image Analysis API #####
+# @app.get("/analyze/")
+# def analyze(image_url: str):
+#     return analyze_image(image_url)
+# ##### Image Analysis API Ends #####
