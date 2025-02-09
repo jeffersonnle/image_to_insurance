@@ -156,3 +156,8 @@ def refresh_access_token(refresh_token_request: database.RefreshTokenRequest):
 ##### Authentication API ends #####
 
 
+##### Image Analysis API #####
+@app.get("/analyze/")
+def analyze(image_url: str):
+    return analyze_image(image_url)
+##### Image Analysis API Ends #####
