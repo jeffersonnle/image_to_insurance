@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import { IconButton } from "@mui/material";
@@ -7,7 +7,9 @@ import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 
 export default function Results() {
-  const navigate = useNavigate(); // React Router navigation
+  const navigate = useNavigate();
+  const [selectedForm, setSelectedForm] = useState(null);
+
   const formPreviews = [
     {
       img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
@@ -59,7 +61,7 @@ export default function Results() {
                   variant="outlined" 
                   color="primary" 
                   fullWidth 
-                  onClick={() => console.log(`Viewing ${form.title}`)}
+                  onClick={() => setSelectedForm(form.title)}
                 >
                   {form.title}
                 </Button>
@@ -68,18 +70,12 @@ export default function Results() {
           </div>
         </div>
 
-        {/* Right Section with Back Button */}
-        <div className="w-1/2 flex flex-col items-center justify-center p-6">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Select a Form to View</h2>
-          <Button 
-            variant="outlined" 
-            color="secondary" 
-            size="large" 
-            className="mt-4"
-            onClick={() => navigate("/")}
-          >
-            Back to Home
-          </Button>
+        {/* Right Section with Displayed Form */}
+        <div className="w-1/2 flex flex-col items-center justify-center p-6 bg-white rounded-lg shadow-md">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">{selectedForm || "Select a Form to View"}</h2>
+          <div className="w-full h-96 bg-gray-200 flex items-center justify-center text-gray-500 rounded-md">
+            {selectedForm ? `Displaying ${selectedForm}` : "No form selected"}
+          </div>
         </div>
       </div>
     </div>
