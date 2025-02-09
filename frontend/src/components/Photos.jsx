@@ -46,7 +46,8 @@ export default function Photos() {
             console.log(analysisResults);
             if (analysisResults) {
                 localStorage.setItem("analysis_results", JSON.stringify(analysisResults));
-                navigate("/results"); // Redirect to Results page
+                // ✅ Pass imageURL when navigating
+                navigate("/results", { state: { imageURL: selectedURL } });            
             } else {
                 alert("Failed to analyze image. Please try again.");
             }
