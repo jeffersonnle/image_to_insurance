@@ -203,6 +203,24 @@ async def upload_image(
     
     return JSONResponse(content={"message": "Image uploaded successfully!", "image_url": image_url})
 
+@app.get("/images/")
+def get_user_images(username: str = Query(..., description="The username to fetch images for")):
+    # List all objects in the GCP bucket under the folder prefix 'hack_images/{username}/'
+    prefix = f"hack_images/{username}/"
+    blobs = bucket.list_blobs(prefix=prefix)
+
+    image_urls = []
+    
+    # Iterate through the blobs and collect the public URLs
+    for blob in blobs:
+        image_urls.append(blob.public_url)
+    
+    if not image_urls:
+        return JSONResponse(content={"message": "No images found for this user."}, status_code=404)
+
+    return JSONResponse(content={"message": "Images fetched successfully!", "image_urls": image_urls})
+
+
 ##### Image Analysis API #####
 @app.get("/analyze/")
 def analyze(image_url: str):

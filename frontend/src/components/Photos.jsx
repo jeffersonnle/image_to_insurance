@@ -19,8 +19,9 @@ export default function Photos() {
       if (!token) return null;
 
       try {
-        const decodedToken = jwtDecode(token); // Use jwt_decode for decoding
-        return decodedToken.username; // Assuming the username is part of the decoded token
+        const decodedToken = jwtDecode(token); 
+        console.log(decodedToken.sub);
+        return decodedToken.sub; 
       } catch (error) {
         console.error("Error decoding the token", error);
         return null;
