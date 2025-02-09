@@ -157,7 +157,7 @@ export default function Photos() {
                         color="primary" 
                         size="large" 
                         className="mt-4"
-                        onClick={() => navigate("/processing")} // ✅ Redirect to Processing
+                         // ✅ Redirect to Processing
                     >
                         Submit Photo
                     </Button>

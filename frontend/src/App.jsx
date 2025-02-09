@@ -7,7 +7,6 @@ import Register from "./components/Register.jsx"
 import Photos from "./components/Photos.jsx"
 import Results from "./components/Results.jsx"
 import { SessionProvider } from "./components/SessionProvider";
-import Processing from './components/Processing.jsx'
 
 function App() {
   //const [count, setCount] = useState(0)
@@ -20,7 +19,6 @@ function App() {
         <Route path="/photos" element={<Photos />} />
         <Route path="/register" element={<Register/>}/>
         <Route path="/results" element={<Results/>}/>
-        <Route path="/processing" element={<Processing/>}/>
       </Routes>
     </SessionProvider>
   )
