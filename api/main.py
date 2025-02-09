@@ -175,3 +175,8 @@ async def upload_image(image: UploadFile = File(...)):
     return JSONResponse({"image_url": f"http://localhost:8000/{file_path}"})
 
 
+##### Image Analysis API #####
+@app.get("/analyze/")
+def analyze(image_url: str):
+    return analyze_image(image_url)
+##### Image Analysis API Ends #####
